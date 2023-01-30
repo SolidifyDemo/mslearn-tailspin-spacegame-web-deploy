@@ -8,7 +8,7 @@ on:
 
 jobs:
   build:
-
+    name: "Build and package"
     runs-on: ubuntu-latest
 
     steps:
@@ -23,3 +23,40 @@ jobs:
       run: dotnet build --no-restore
     - name: Test
       run: dotnet test --no-build --verbosity normal
+    - name: Package
+      run: dotnet publish -c Release -o webapp
+    - name: Upload a Build Artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: webapp
+        path: webapp/**
+        
+  deploy_dev:
+    name: "Deploy to dev"
+    environment: 
+      name: dev
+      url: ${{ steps.deploywebapp.outputs.webapp-url }}
+    needs: [build]
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Download a Build Artifact
+      uses: actions/download-artifact@v3
+      with:
+        name: webapp
+        path: webapp
+
+    - name: Login via Azure CLI
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+    - name: Deploy web app
+      id: deploywebapp
+      uses: azure/webapps-deploy@v2
+      with:
+        app-name: "tailspin-space-game-web-dev-12185"
+        package: webapp
+
+    - name: az cli logout
+      run: az logout   
