@@ -16,6 +16,7 @@ namespace Tailspin.SpaceGame.Web.Tests
         [TestMethod]
         public void TestMethod3()
         {
+            Assert.Fail();
         }
     }
 }
