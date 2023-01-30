@@ -23,18 +23,27 @@ jobs:
     - name: Build
       run: dotnet build --no-restore
     - name: Test
-      run: dotnet test --no-build --verbosity normal --logger "trx;LogFileName=test-results.trx"
-    - name: Publish Test Results
-      uses: EnricoMi/publish-unit-test-result-action@v2
-      if: always()
+      run: dotnet test --no-build --verbosity normal --logger "junit;LogFilePath=results/tests.xml"
+
+    - name: Create test summary
+      uses: test-summary/action@dist
       with:
-        trx_files: "**/*.trx"
+        paths: '**/tests.xml'
+      if: always()
+
+#      run: dotnet test --no-build --verbosity normal --logger "trx;LogFileName=test-results.trx"
+#    - name: Publish Test Results
+#      uses: EnricoMi/publish-unit-test-result-action@v2
+#      if: always()
+#      with:
+#        trx_files: "**/*.trx"
 #    - name: Test Report
 #      uses: dorny/test-reporter@v1
 #      if: success() || failure()    # run this step even if previous step failed
 #      with:
 #        name: Tests
 #        path: '**/*.trx'
+#        only-summary: true
 #        reporter: dotnet-trx      
     - name: Package
       run: dotnet publish -c Release -o webapp
