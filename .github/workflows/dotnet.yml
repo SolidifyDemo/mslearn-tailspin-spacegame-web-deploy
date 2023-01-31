@@ -31,3 +31,16 @@ jobs:
       with:
         name: web
         path: webapp/**    
+    
+  deploy_dev:
+    runs-on: ubuntu-latest
+    steps:
+    - name: testing workflow
+      run: echo "deploy to dev"
+
+  deploy_test:
+    runs-on: ubuntu-latest
+    steps:
+    - name: testing workflow
+      run: echo "deploy to test"
+
