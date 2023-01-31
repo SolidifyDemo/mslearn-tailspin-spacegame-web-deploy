@@ -22,22 +22,22 @@ jobs:
       run: dotnet restore
     - name: Build
       run: dotnet build --no-restore 
-#    - name: Test
-#      run: dotnet test --no-build --verbosity normal --logger "junit;LogFilePath=results/tests.xml"
-#      continue-on-error: true
+    - name: Test
+      run: dotnet test --no-build --verbosity normal --logger "junit;LogFilePath=results/tests.xml"
+      continue-on-error: true
 
-#    - name: Create test summary
-#      uses: test-summary/action@dist
-#      with:
-#        paths: '**/tests.xml'
-#      if: always()
+    - name: Create test summary
+      uses: test-summary/action@dist
+      with:
+        paths: '**/tests.xml'
+      if: always()
 
-#    - name: Update config
-#      uses: microsoft/variable-substitution@v1 
-#      with:
-#          files: '**/appsettings.json'
-#      env:
-#          Environment: 'TEST'
+    - name: Update config
+      uses: microsoft/variable-substitution@v1 
+      with:
+          files: '**/appsettings.json'
+      env:
+          Environment: 'TEST'
         
 #      run: dotnet test --no-build --verbosity normal --logger "trx;LogFileName=test-results.trx"
 #    - name: Publish Test Results
