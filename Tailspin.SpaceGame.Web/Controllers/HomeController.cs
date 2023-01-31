@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using TailSpin.SpaceGame.Web.Models;
 
 namespace TailSpin.SpaceGame.Web.Controllers
@@ -14,14 +15,17 @@ namespace TailSpin.SpaceGame.Web.Controllers
         private readonly IDocumentDBRepository<Score> _scoreRepository;
         // User profile repository.
         private readonly IDocumentDBRepository<Profile> _profileRespository;
+        private IConfiguration configuration;
 
         public HomeController(
             IDocumentDBRepository<Score> scoreRepository,
-            IDocumentDBRepository<Profile> profileRespository
+            IDocumentDBRepository<Profile> profileRespository,
+            IConfiguration configuration
             )
         {
             _scoreRepository = scoreRepository;
             _profileRespository = profileRespository;
+            this.configuration = configuration;
         }
 
         public async Task<IActionResult> Index(
@@ -31,6 +35,8 @@ namespace TailSpin.SpaceGame.Web.Controllers
             string region = ""
             )
         {
+            var env = this.configuration.GetValue<string>("Environment");
+
             // Create the view model with initial values we already know.
             var vm = new LeaderboardViewModel
             {
@@ -38,6 +44,7 @@ namespace TailSpin.SpaceGame.Web.Controllers
                 PageSize = pageSize,
                 SelectedMode = mode,
                 SelectedRegion = region,
+                Environment = env,
 
                 GameModes = new List<string>()
                 {
@@ -78,7 +85,7 @@ namespace TailSpin.SpaceGame.Web.Controllers
 
                 // Wait for the total count.
                 vm.TotalResults = await countItemsTask;
-
+                
                 // Set previous and next hyperlinks.
                 if (page > 1)
                 {

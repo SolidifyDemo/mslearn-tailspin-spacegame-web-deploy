@@ -12,6 +12,7 @@ namespace TailSpin.SpaceGame.Web.Models
         public int Page { get; set; }
         // The number of items to show per page in the view.
         public int PageSize { get; set; }
+        public string Environment { get; set; }
 
         // The scores to display in the view.
         public IEnumerable<ScoreProfile> Scores { get; set; }

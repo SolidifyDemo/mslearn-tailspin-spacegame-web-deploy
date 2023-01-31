@@ -52,6 +52,8 @@ namespace TailSpin.SpaceGame.Web
                 app.UseHsts();
             }
 
+            var environment = Configuration.GetValue<string>("Environment");
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
