@@ -30,7 +30,15 @@ jobs:
       with:
         paths: '**/tests.xml'
       if: always()
+      continue-on-error: true
 
+    - name: Update config
+      uses: microsoft/variable-substitution@v1 
+      with:
+          files: '**/appsettings.json'
+      env:
+          Environment: 'TEST'
+        
 #      run: dotnet test --no-build --verbosity normal --logger "trx;LogFileName=test-results.trx"
 #    - name: Publish Test Results
 #      uses: EnricoMi/publish-unit-test-result-action@v2
@@ -45,6 +53,7 @@ jobs:
 #        path: '**/*.trx'
 #        only-summary: true
 #        reporter: dotnet-trx      
+
     - name: Package
       run: dotnet publish -c Release -o webapp
     - name: Upload a Build Artifact
