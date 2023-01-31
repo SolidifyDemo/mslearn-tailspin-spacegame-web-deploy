@@ -21,7 +21,7 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
-      run: dotnet build --no-restore -c Release 
+      run: dotnet build --no-restore 
 #    - name: Test
 #      run: dotnet test --no-build --verbosity normal --logger "junit;LogFilePath=results/tests.xml"
 #      continue-on-error: true
@@ -55,7 +55,8 @@ jobs:
 #        reporter: dotnet-trx      
 
     - name: Package
-      run: dotnet publish -c Release -o webapp
+      run: dotnet publish Tailspin.SpaceGame.Web -c Release -o webapp
+      
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v3
       with:
