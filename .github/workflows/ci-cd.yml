@@ -24,13 +24,13 @@ jobs:
       run: dotnet build --no-restore
     - name: Test
       run: dotnet test --no-build --verbosity normal --logger "junit;LogFilePath=results/tests.xml"
+      continue-on-error: true
 
     - name: Create test summary
       uses: test-summary/action@dist
       with:
         paths: '**/tests.xml'
       if: always()
-      continue-on-error: true
 
     - name: Update config
       uses: microsoft/variable-substitution@v1 
